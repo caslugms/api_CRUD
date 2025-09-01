@@ -1,16 +1,17 @@
 import { db } from "../config/firebase.js"
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore"
 
+// Listar todos os usuários
 export const getAllUsers = async (req, res) => {
   try {
     const usersCollection = collection(db, "users")
     const snapshot = await getDocs(usersCollection)
 
     const userList = []
-    snapshot.forEach((doc) => {
+    snapshot.forEach((docu) => {
       userList.push({
-        id: doc.id,
-        ...doc.data(),
+        id: docu.id,
+        ...docu.data(),
       })
     })
 
@@ -21,11 +22,11 @@ export const getAllUsers = async (req, res) => {
   }
 }
 
-//Rever
-export const getUserByName = async (req, res) => {
+// Buscar usuário por ID
+export const getUserById = async (req, res) => {
   try {
-    const { name } = req.params
-    const userDoc = doc(db, "users", name)
+    const { id } = req.params
+    const userDoc = doc(db, "users", id)
     const docSnap = await getDoc(userDoc)
 
     if (!docSnap.exists()) {
@@ -33,7 +34,7 @@ export const getUserByName = async (req, res) => {
     }
 
     res.json({
-      name: docSnap.name,
+      id: docSnap.id,
       ...docSnap.data(),
     })
   } catch (error) {
@@ -41,17 +42,19 @@ export const getUserByName = async (req, res) => {
   }
 }
 
+// Função auxiliar para criar IDs incrementais
 const getNextUserId = async () => {
   const usersCollection = collection(db, "users")
   const snapshot = await getDocs(usersCollection)
   return snapshot.size + 1
 }
 
+// Criar novo usuário
 export const createUser = async (req, res) => {
   try {
     const { name, email, age, phone, CPF } = req.body
 
-    if (!name || !email || !age || !phone || !CPF) {
+    if (!name || !email) {
       return res.status(400).json({ error: "Nome e email são obrigatórios" })
     }
 
@@ -62,6 +65,8 @@ export const createUser = async (req, res) => {
       name,
       email,
       age: age || null,
+      phone: phone || null,
+      CPF: CPF || null,
       criadoEm: new Date(),
     }
 
@@ -78,12 +83,13 @@ export const createUser = async (req, res) => {
   }
 }
 
+// Atualizar usuário por ID
 export const updateUser = async (req, res) => {
   try {
-    const { name } = req.params
-    const { email, age, phone, CPF } = req.body
+    const { id } = req.params
+    const { name, email, age, phone, CPF } = req.body
 
-    const userDoc = doc(db, "users", name)
+    const userDoc = doc(db, "users", id)
     const docSnap = await getDoc(userDoc)
 
     if (!docSnap.exists()) {
@@ -94,8 +100,8 @@ export const updateUser = async (req, res) => {
     if (name) updateData.name = name
     if (email) updateData.email = email
     if (age) updateData.age = age
-    if (phone) updateData.phone = phone;
-    if (CPF) updateData.CPF = CPF;
+    if (phone) updateData.phone = phone
+    if (CPF) updateData.CPF = CPF
     updateData.atualizadoEm = new Date()
 
     await updateDoc(userDoc, updateData)
@@ -106,11 +112,12 @@ export const updateUser = async (req, res) => {
   }
 }
 
+// Deletar usuário por ID
 export const deleteUser = async (req, res) => {
   try {
-    const { name } = req.params
+    const { id } = req.params
 
-    const userDoc = doc(db, "users", name)
+    const userDoc = doc(db, "users", id)
     const docSnap = await getDoc(userDoc)
 
     if (!docSnap.exists()) {

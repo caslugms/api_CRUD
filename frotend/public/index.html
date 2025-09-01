@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CONSULTA CEP - IFPR</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBoBGCfBTDL-sHFj2kWebAs9jB5qtQuGfYRQ&s" alt="Logo IFPR Campus Cascavel">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBoBGCfBTDL-sHFj2kWebAs9jB5qtQuGfYRQ&s"
+            alt="Logo IFPR Campus Cascavel">
         <h1>Consulta do CEP</h1>
 
         <form id="form" action="post">
@@ -28,18 +31,20 @@
                 <label for="CPF">CPF</label>
                 <input type="text" class="input" name="CPF" id="CPF" placeholder="Type your CPF">
 
-            <button type="submit" id="salvar">Salvar usuário</button>
+                <button type="submit" id="salvar">Salvar usuário</button>
         </form>
-        
+
         <div id="dados-salvos" class="dados-salvos">
             <button type="button" id="listar">Listar usuários</button>
-            <button type="button" id="listar">Buscar usuários por nome</button>
-            <button type="button" id="listar">Atualizar usuário</button>
-            <button type="button" id="listar">Deletar usuário</button>
+            <button type="button" id="buscar">Buscar usuário por ID</button>
+            <button type="button" id="atualizar">Atualizar usuário</button>
+            <button type="button" id="deletar">Deletar usuário</button>
         </div>
+
     </div>
-    
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="documento.js"></script>
 </body>
+
 </html>
