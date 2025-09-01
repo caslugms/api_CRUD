@@ -1,7 +1,6 @@
 import { db } from "../config/firebase.js"
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore"
 
-// Listar todos os usuários
 export const getAllUsers = async (req, res) => {
   try {
     const usersCollection = collection(db, "users")
@@ -22,7 +21,6 @@ export const getAllUsers = async (req, res) => {
   }
 }
 
-// Buscar usuário por ID
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params
@@ -42,14 +40,12 @@ export const getUserById = async (req, res) => {
   }
 }
 
-// Função auxiliar para criar IDs incrementais
 const getNextUserId = async () => {
   const usersCollection = collection(db, "users")
   const snapshot = await getDocs(usersCollection)
   return snapshot.size + 1
 }
 
-// Criar novo usuário
 export const createUser = async (req, res) => {
   try {
     const { name, email, age, phone, CPF } = req.body
@@ -83,7 +79,6 @@ export const createUser = async (req, res) => {
   }
 }
 
-// Atualizar usuário por ID
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params
@@ -112,7 +107,6 @@ export const updateUser = async (req, res) => {
   }
 }
 
-// Deletar usuário por ID
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params
