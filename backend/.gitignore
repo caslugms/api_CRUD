@@ -9,6 +9,11 @@ build/
 .env.local
 .env.*.local
 
+# Firebase config
+config/firebase*
+config/*.env
+config/*.json
+
 # Logs
 logs
 *.log
