@@ -5,7 +5,7 @@ const resultadosDiv = document.getElementById("resultados")
 const listaUsuariosDiv = document.getElementById("lista-usuarios")
 
 function msg(texto, tipo = "ok") {
-  alert(tipo === "ok" ? texto : "errado" + texto)
+  alert(tipo === "ok" ? texto : "Erro: " + texto)
 }
 
 function renderUsuarios(usuarios) {
@@ -30,22 +30,22 @@ form.onsubmit = async e => {
   const data = Object.fromEntries(new FormData(form).entries())
   try {
     const r = await fetch(API_BASE_URL, {
-      method: "POST", headers: { "Content-Type": "application/json" },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
-    if (r.ok) msg("Usuário salvo!"); else msg("Erro ao salvar", "err")
+    msg(r.ok ? "Usuário salvo!" : "Erro ao salvar", r.ok ? "ok" : "err")
     form.reset()
-  } catch { msg("Erro de conexão", "err") }
+  } catch {
+    msg("Erro de conexão", "err")
+  }
 }
 
 async function listUsers() {
   try {
     const r = await fetch(API_BASE_URL)
-    const dados = await r.json()
-    console.log("Resposta do listar:", dados) // <-- debug
-    renderUsuarios(Array.isArray(dados) ? dados : [dados])
-  } catch (err) {
-    console.error("Erro ao listar:", err)
+    renderUsuarios(await r.json())
+  } catch {
     msg("Erro ao listar", "err")
   }
 }
@@ -55,11 +55,8 @@ async function getUser() {
   if (!id) return
   try {
     const r = await fetch(`${API_BASE_URL}/${id}`)
-    const dados = await r.json()
-    console.log("Resposta do buscar:", dados) // <-- debug
-    renderUsuarios([dados])
-  } catch (err) {
-    console.error("Erro ao buscar:", err)
+    renderUsuarios([await r.json()])
+  } catch {
     msg("Erro ao buscar", "err")
   }
 }
@@ -70,11 +67,14 @@ async function updateUser() {
   const name = prompt("Novo nome:")
   try {
     const r = await fetch(`${API_BASE_URL}/${id}`, {
-      method: "PUT", headers: { "Content-Type": "application/json" },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name })
     })
-    if (r.ok) msg("Atualizado!"); else msg("Erro ao atualizar", "err")
-  } catch { msg("Erro", "err") }
+    msg(r.ok ? "Atualizado!" : "Erro ao atualizar", r.ok ? "ok" : "err")
+  } catch {
+    msg("Erro", "err")
+  }
 }
 
 async function delUser(id) {
@@ -82,12 +82,12 @@ async function delUser(id) {
   try {
     const r = await fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" })
     if (r.ok) { msg("Deletado!"); listUsers() }
-  } catch { msg("Erro ao deletar", "err") }
+  } catch {
+    msg("Erro ao deletar", "err")
+  }
 }
 
 document.getElementById("listar").onclick = listUsers
 document.getElementById("buscar").onclick = getUser
 document.getElementById("atualizar").onclick = updateUser
 document.getElementById("deletar").onclick = () => delUser(prompt("ID do usuário:"))
-
-console.log("App iniciado, API:", API_BASE_URL)
