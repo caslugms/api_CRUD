@@ -50,17 +50,6 @@ async function listUsers() {
   }
 }
 
-async function getUser() {
-  const id = prompt("ID do usuário:")
-  if (!id) return
-  try {
-    const r = await fetch(`${API_BASE_URL}/${id}`)
-    renderUsuarios([await r.json()])
-  } catch {
-    msg("Erro ao buscar", "err")
-  }
-}
-
 async function updateUser() {
   const id = prompt("ID do usuário:")
   if (!id) return
@@ -88,6 +77,5 @@ async function delUser(id) {
 }
 
 document.getElementById("listar").onclick = listUsers
-document.getElementById("buscar").onclick = getUser
 document.getElementById("atualizar").onclick = updateUser
 document.getElementById("deletar").onclick = () => delUser(prompt("ID do usuário:"))

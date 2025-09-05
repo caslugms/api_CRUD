@@ -21,25 +21,6 @@ export const getAllUsers = async (req, res) => {
   }
 }
 
-export const getUserById = async (req, res) => {
-  try {
-    const { id } = req.params
-    const userDoc = doc(db, "users", id)
-    const docSnap = await getDoc(userDoc)
-
-    if (!docSnap.exists()) {
-      return res.status(404).json({ error: "Usuário não encontrado" })
-    }
-
-    res.json({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar usuário" })
-  }
-}
-
 const getNextUserId = async () => {
   const usersCollection = collection(db, "users")
   const snapshot = await getDocs(usersCollection)
