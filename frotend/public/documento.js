@@ -5,7 +5,11 @@ const resultadosDiv = document.getElementById("resultados")
 const listaUsuariosDiv = document.getElementById("lista-usuarios")
 
 function msg(texto, tipo = "ok") {
-  alert(tipo === "ok" ? texto : "Erro: " + texto)
+  if (tipo === "ok") {
+    alert(texto)
+  } else {
+    alert("Erro: " + texto)
+  }
 }
 
 function renderUsuarios(usuarios) {
